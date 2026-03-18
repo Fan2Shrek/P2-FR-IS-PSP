@@ -1,0 +1,19 @@
+{
+    "version": "0.2",
+    "language": "fr",
+    "words": [
+        "Alaya",
+        "Ginko",
+        "Iwato",
+        "Philemon",
+        "Yukino"
+    ],
+	"files": ["scripts/*.json"],
+	"overrides": [
+		{
+		  "filename": "**/*.json",
+		  "language": "fr",
+		  "jsonPaths": ["$..texte_fr"]
+		}
+	]
+}
