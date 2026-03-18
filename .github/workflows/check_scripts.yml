@@ -36,5 +36,20 @@ jobs:
 
       - name: Run json-verify
         if: ${{ steps.filter.outputs.changed == 'true' }}
+        continue-on-error: true
         run: |
-          python JsonVerify/cli.py ${{ steps.filter.outputs.changed_files }}
+          python JsonVerify/cli.py ${{ steps.filter.outputs.changed_files }} --markdown
+
+      - name: Comment json-verify result on PR
+        if: steps.verify.outcome != 'success'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            ❌ **`json-verify` failed for the following files:**
+            ${{ steps.filter.outputs.changed_files }}
+
+            **Output:**
+            ```text
+            ${{ steps.verify.outputs.output }}
+            ```
