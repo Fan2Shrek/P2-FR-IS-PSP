@@ -62,6 +62,9 @@ jobs:
           body: |
             ❌ **`json-verify` failed:**
             **Output:**
-            ```text
+
             ${{ steps.verify.outputs.output }}
-            ```
+
+      - name: Fail the job if json-verify failed
+        if: steps.verify.outcome != 'success'
+        run: exit 1
