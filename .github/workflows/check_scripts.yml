@@ -67,4 +67,6 @@ jobs:
 
       - name: Fail the job if json-verify failed
         if: steps.verify.outcome != 'success'
-        run: exit 1
+        run: |
+          echo ${{ steps.verify.outputs.output }}
+          exit 1
