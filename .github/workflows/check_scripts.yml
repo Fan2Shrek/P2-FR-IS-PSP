@@ -36,6 +36,7 @@ jobs:
 
       - name: Run json-verify
         if: ${{ steps.filter.outputs.changed == 'true' }}
+        id: verify
         continue-on-error: true
         run: |
           python JsonVerify/cli.py ${{ steps.filter.outputs.changed_files }} --markdown
