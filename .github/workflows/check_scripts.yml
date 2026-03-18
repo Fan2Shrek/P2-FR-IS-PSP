@@ -39,13 +39,15 @@ jobs:
         id: verify
         continue-on-error: true
         run: |
-          python JsonVerify/cli.py ${{ steps.filter.outputs.changed_files }} --markdown
+          RESULT=$(python JsonVerify/cli.py ${{ steps.filter.outputs.changed_files }} --markdown)
+          echo "output=$RESULT" >> $GITHUB_OUTPUT
 
       - name: Comment json-verify result on PR
         if: steps.verify.outcome != 'success'
         uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          identifier: json-verify-result
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ❌ **`json-verify` failed:**
