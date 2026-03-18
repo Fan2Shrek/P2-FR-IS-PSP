@@ -52,12 +52,19 @@ jobs:
             exit $EXITCODE
           fi
 
+      - name: Find Comment
+        uses: peter-evans/find-comment@v4
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: ❌ **`json-verify` failed:**
+
       - name: Comment json-verify result on PR
         if: steps.verify.outcome != 'success'
         uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          identifier: json-verify-result
+          comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ❌ **`json-verify` failed:**
@@ -68,5 +75,5 @@ jobs:
       - name: Fail the job if json-verify failed
         if: steps.verify.outcome != 'success'
         run: |
-          echo ${{ steps.verify.outputs.output }}
+          echo "${{ steps.verify.outputs.output }}"
           exit 1
